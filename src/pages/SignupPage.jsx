@@ -26,11 +26,13 @@ export default function SignupPage() {
         password: formData.password,
       })
       alert(response.data.msg);
+
+      localStorage.setItem("token", response.data.token);
       navigate('/dashboard')
-      console.log(response.data);
+
       setFormData({ email: "", password: "" });
     } catch (error) {
-      // alert(response.data.msg);
+      alert(response.data.msg);
 
     } finally {
       setLoading(false);
@@ -44,10 +46,10 @@ export default function SignupPage() {
   return (
     <>
       <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-        
-          <div className="text-sm font-semibold text-pink-600 tracking-wide mx-auto w-auto">/TUDUSTACK</div>
+
+        <div className="text-sm font-semibold text-pink-600 tracking-wide mx-auto w-auto">/TUDUSTACK</div>
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          
+
           <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
             Sign Up to your account
           </h2>
