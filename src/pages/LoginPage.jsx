@@ -3,10 +3,13 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { API_BASE } from "../config";
+import { useAuth } from "../context/AuthContext";
 
 export default function LoginPage() {
   const [formData, setformData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
+
+  const { login } = useAuth();
   const navigate = useNavigate();
   const handleChange = (e) => {
     setformData({
@@ -28,6 +31,8 @@ export default function LoginPage() {
 
       localStorage.setItem("token", response.data.token);
       navigate("/dashboard");
+      const { token, user } = response.data;
+      login(token, user);
 
       setformData({ email: "", password: "" })
 
