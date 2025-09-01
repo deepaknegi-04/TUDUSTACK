@@ -3,11 +3,13 @@ import { Link } from "react-router-dom";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { API_BASE } from "../config";
+import { useAuth } from "../context/AuthContext";
 
 export default function SignupPage() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -27,13 +29,21 @@ export default function SignupPage() {
       })
       alert(response.data.msg);
 
-      localStorage.setItem("token", response.data.token);
-      navigate('/dashboard')
+      if (response.data.token) {
+        localStorage.setItem("token", response.data.token);
+        const { token, user } = response.data;
+        login(token, user);
+        navigate("/dashboard");
+      }
 
       setFormData({ email: "", password: "" });
     } catch (error) {
-      alert(response.data.msg);
+      if (error.response && error.response.data) {
+        alert(error.response.data.msg);
 
+      } else {
+        alert("Something went wrong");
+      }
     } finally {
       setLoading(false);
     }
